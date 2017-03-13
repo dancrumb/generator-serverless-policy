@@ -1,0 +1,23 @@
+{
+  "name": "generator-serverless-policy",
+  "version": "1.0.0",
+  "description": "Generator for the basic IAM policy to allow a user to deploy a Serverless service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "engines": {
+    "node": ">= 6.4.0"
+  },
+  "author": "Dan Rumney <dancrumb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "yeoman-generator": "^1.1.1"
+  }
+}
