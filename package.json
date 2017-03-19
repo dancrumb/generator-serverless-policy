@@ -1,6 +1,6 @@
 {
   "name": "generator-serverless-policy",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Generator for the basic IAM policy to allow a user to deploy a Serverless service",
   "main": "index.js",
   "scripts": {
