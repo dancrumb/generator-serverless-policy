@@ -40,7 +40,7 @@ const buildPolicy = (project, stage, region) => {
                 "s3:CreateBucket"
             ],
             "Resource": [
-                "arn:aws:s3:::${project}-*-serverlessdeploymentbucket-* also"
+                "arn:aws:s3:::${project}-*-serverlessdeploymentbucket-*"
             ]
         },
         {
