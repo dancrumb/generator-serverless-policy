@@ -3,153 +3,130 @@ const Generator = require('yeoman-generator');
 
 const buildPolicy = (serviceName, stage, region) => {
   return {
-    "Version": "2012-10-17",
-    "Statement": [
+    Version: '2012-10-17',
+    Statement: [
       {
-        "Effect": "Allow",
-        "Action": [
-          "cloudformation:List*",
-          "cloudformation:Get*",
-          "cloudformation:PreviewStackUpdate"
+        Effect: 'Allow',
+        Action: [
+          'cloudformation:List*',
+          'cloudformation:Get*',
+          'cloudformation:PreviewStackUpdate'
         ],
-        "Resource": "*"
+        Resource: ['*']
       },
       {
-        "Effect": "Allow",
-        "Action":[
-          "cloudformation:CreateStack",
-          "cloudformation:CreateUploadBucket",
-          "cloudformation:DeleteStack",
-          "cloudformation:DescribeStackEvents",
-          "cloudformation:DescribeStackResource",
-          "cloudformation:DescribeStackResources",
-          "cloudformation:UpdateStack",
-          "cloudformation:DescribeStacks"
+        Effect: 'Allow',
+        Action: [
+          'cloudformation:CreateStack',
+          'cloudformation:CreateUploadBucket',
+          'cloudformation:DeleteStack',
+          'cloudformation:DescribeStackEvents',
+          'cloudformation:DescribeStackResource',
+          'cloudformation:DescribeStackResources',
+          'cloudformation:UpdateStack',
+          'cloudformation:DescribeStacks'
         ],
-        "Resource": `arn:aws:cloudformation:${region}:*:stack/${serviceName}-${stage}/*`
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
-          "lambda:Get*",
-          "lambda:List*",
-          "lambda:CreateFunction"
-        ],
-        "Resource": "*"
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
-          "s3:CreateBucket"
-        ],
-        "Resource": [
-          `arn:aws:s3:::${serviceName}*serverlessdeploymentbucket*`
+        Resource: [
+          `arn:aws:cloudformation:${region}:*:stack/${serviceName}-${stage}/*`
         ]
       },
       {
-        "Effect": "Allow",
-        "Action": [
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:ListBucket",
-          "s3:DeleteObject",
-          "s3:DeleteBucket",
-          "s3:ListBucketVersions"
+        Effect: 'Allow',
+        Action: ['lambda:Get*', 'lambda:List*', 'lambda:CreateFunction'],
+        Resource: ['*']
+      },
+      {
+        Effect: 'Allow',
+        Action: ['s3:CreateBucket'],
+        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploymentbucket*`]
+      },
+      {
+        Effect: 'Allow',
+        Action: [
+          's3:PutObject',
+          's3:GetObject',
+          's3:ListBucket',
+          's3:DeleteObject',
+          's3:DeleteBucket',
+          's3:ListBucketVersions'
         ],
-        "Resource": [
-          `arn:aws:s3:::${serviceName}*serverlessdeploymentbucket*`
+        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploymentbucket*`]
+      },
+      {
+        Effect: 'Allow',
+        Action: [
+          'lambda:AddPermission',
+          'lambda:CreateAlias',
+          'lambda:DeleteFunction',
+          'lambda:InvokeFunction',
+          'lambda:PublishVersion',
+          'lambda:RemovePermission',
+          'lambda:Update*'
+        ],
+        Resource: [
+          `arn:aws:lambda:${region}:*:function:${serviceName}-${stage}-*`
         ]
       },
       {
-        "Effect": "Allow",
-        "Action": [
-          "lambda:AddPermission",
-          "lambda:CreateAlias",
-          "lambda:DeleteFunction",
-          "lambda:InvokeFunction",
-          "lambda:PublishVersion",
-          "lambda:RemovePermission",
-          "lambda:Update*"
-        ],
-        "Resource": `arn:aws:lambda:${region}:*:function:${serviceName}-${stage}-*`
+        Effect: 'Allow',
+        Action: ['apigateway:GET'],
+        Resource: ['arn:aws:apigateway:*::/restapis']
       },
       {
-        "Effect": "Allow",
-        "Action": [
-          "apigateway:GET"
+        Effect: 'Allow',
+        Action: [
+          'apigateway:GET',
+          'apigateway:POST',
+          'apigateway:PUT',
+          'apigateway:DELETE'
         ],
-        "Resource": [
-          "arn:aws:apigateway:*::/restapis"
+        Resource: ['arn:aws:apigateway:*::/restapis/*/*']
+      },
+      {
+        Effect: 'Allow',
+        Action: ['iam:PassRole'],
+        Resource: ['arn:aws:iam::*:role/*']
+      },
+      {
+        Effect: 'Allow',
+        Action: 'kinesis:*',
+        Resource: [
+          `arn:aws:kinesis:*:*:stream/${serviceName}-${stage}-${region}`
         ]
       },
       {
-        "Effect": "Allow",
-        "Action": [
-          "apigateway:GET",
-          "apigateway:POST",
-          "apigateway:PUT",
-          "apigateway:DELETE"
-        ],
-        "Resource": [
-          "arn:aws:apigateway:*::/restapis/*/*"
+        Effect: 'Allow',
+        Action: 'iam:*',
+        Resource: [
+          `arn:aws:iam::*:role/${serviceName}-${stage}-${region}-lambdaRole`
         ]
       },
       {
-        "Effect": "Allow",
-        "Action": [
-          "iam:PassRole"
-        ],
-        "Resource": "arn:aws:iam::*:role/*"
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [`arn:aws:sqs:*:*:${serviceName}-${stage}-${region}`]
       },
       {
-        "Effect": "Allow",
-        "Action": "kinesis:*",
-        "Resource": `arn:aws:kinesis:*:*:stream/${serviceName}-${stage}-${region}`
+        Effect: 'Allow',
+        Action: ['cloudwatch:GetMetricStatistics'],
+        Resource: ['*']
       },
       {
-        "Effect": "Allow",
-        "Action": "iam:*",
-        "Resource": `arn:aws:iam::*:role/${serviceName}-${stage}-${region}-lambdaRole`
+        Effect: 'Allow',
+        Action: ['logs:DescribeLogStreams', 'logs:FilterLogEvents'],
+        Resource: ['*']
       },
       {
-        "Effect": "Allow",
-        "Action": "sqs:*",
-        "Resource": `arn:aws:sqs:*:*:${serviceName}-${stage}-${region}`
-      },
-      {
-        "Effect":"Allow",
-        "Action":[
-          "cloudwatch:GetMetricStatistics"
-        ],
-        "Resource":[
-          "*"
-        ]
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
-          "logs:DescribeLogStreams",
-          "logs:FilterLogEvents"
-        ],
-        "Resource": [
-          "*"
-        ]
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
-          "events:Put*",
-          "events:Remove*",
-          "events:Delete*"
-        ],
-        "Resource": `arn:aws:events:*:*:rule/${serviceName}-${stage}-${region}`
+        Effect: 'Allow',
+        Action: ['events:Put*', 'events:Remove*', 'events:Delete*'],
+        Resource: [`arn:aws:events:*:*:rule/${serviceName}-${stage}-${region}`]
       }
     ]
   };
 };
 
-const escapeValFilename = function (val) {
-  return (val === '*') ? '_star_' : val;
+const escapeValFilename = function(val) {
+  return val === '*' ? '_star_' : val;
 };
 
 module.exports = class extends Generator {
@@ -173,26 +150,31 @@ module.exports = class extends Generator {
   }
 
   prompting() {
-    return this.prompt([{
-      type: 'input',
-      name: 'name',
-      message: 'Your Serverless service name',
-      default: this.appname // Default to current folder name
-    }, {
-      type: 'input',
-      name: 'stage',
-      message: 'You can specify a specific stage, if you like:',
-      default: '*'
-    }, {
-      type: 'input',
-      name: 'region',
-      message: 'You can specify a specific region, if you like:',
-      default: '*'
-    }, {
-      type    : 'confirm',
-      name    : 'dynamodb',
-      message : 'Does your service rely on DynamoDB?'
-    }]).then((answers) => {
+    return this.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Your Serverless service name',
+        default: this.appname // Default to current folder name
+      },
+      {
+        type: 'input',
+        name: 'stage',
+        message: 'You can specify a specific stage, if you like:',
+        default: '*'
+      },
+      {
+        type: 'input',
+        name: 'region',
+        message: 'You can specify a specific region, if you like:',
+        default: '*'
+      },
+      {
+        type: 'confirm',
+        name: 'dynamodb',
+        message: 'Does your service rely on DynamoDB?'
+      }
+    ]).then(answers => {
       this.slsSettings = {
         name: answers.name,
         stage: answers.stage,
@@ -213,15 +195,11 @@ module.exports = class extends Generator {
     const region = this.slsSettings.region;
 
     const policy = buildPolicy(project, stage, region);
-    if(this.slsSettings.dynamodb) {
+    if (this.slsSettings.dynamodb) {
       policy.Statement.push({
-        "Effect": "Allow",
-        "Action": [
-          "dynamodb:*"
-        ],
-        "Resource": [
-          "arn:aws:dynamodb:*:*:table/*"
-        ]
+        Effect: 'Allow',
+        Action: ['dynamodb:*'],
+        Resource: ['arn:aws:dynamodb:*:*:table/*']
       });
     }
     const policyString = JSON.stringify(policy);
@@ -229,8 +207,5 @@ module.exports = class extends Generator {
 
     this.log(`Writing to ${fileName}`);
     fs.writeFile(fileName, policyString, done);
-
   }
-
-
 };
