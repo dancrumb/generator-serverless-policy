@@ -202,7 +202,7 @@ module.exports = class extends Generator {
         Resource: ['arn:aws:dynamodb:*:*:table/*']
       });
     }
-    const policyString = JSON.stringify(policy);
+    const policyString = JSON.stringify(policy, null, 2);
     const fileName = `${project}-${escapeValFilename(stage)}-${escapeValFilename(region)}-policy.json`;
 
     this.log(`Writing to ${fileName}`);
