@@ -110,6 +110,16 @@ const buildPolicy = (serviceName, stage, region) => {
         Resource: ['*']
       },
       {
+        Action: ['logs:CreateLogGroup', 'logs:CreateLogStream'],
+        Resource: [`arn:aws:logs:${region}:*:*`],
+        Effect: 'Allow'
+      },
+      {
+        Action: ['logs:PutLogEvents'],
+        Resource: [`arn:aws:logs:${region}:*:*`],
+        Effect: 'Allow'
+      },
+      {
         Effect: 'Allow',
         Action: [
           'logs:DescribeLogStreams',
