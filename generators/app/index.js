@@ -113,7 +113,11 @@ const buildPolicy = (serviceName, stage, region) => {
       },
       {
         Effect: 'Allow',
-        Action: ['logs:DescribeLogStreams', 'logs:FilterLogEvents'],
+        Action: [
+          'logs:DescribeLogStreams',
+          'logs:DescribeLogGroups',
+          'logs:FilterLogEvents'
+        ],
         Resource: ['*']
       },
       {
