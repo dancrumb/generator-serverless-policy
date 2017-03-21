@@ -69,18 +69,16 @@ const buildPolicy = (serviceName, stage, region) => {
       },
       {
         Effect: 'Allow',
-        Action: ['apigateway:GET'],
-        Resource: ['arn:aws:apigateway:*::/restapis']
-      },
-      {
-        Effect: 'Allow',
         Action: [
           'apigateway:GET',
           'apigateway:POST',
           'apigateway:PUT',
           'apigateway:DELETE'
         ],
-        Resource: ['arn:aws:apigateway:*::/restapis/*/*']
+        Resource: [
+          'arn:aws:apigateway:*::/restapis',
+          'arn:aws:apigateway:*::/restapis/*/*'
+        ]
       },
       {
         Effect: 'Allow',
