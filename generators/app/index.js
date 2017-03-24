@@ -184,14 +184,14 @@ module.exports = class extends Generator {
         type: 'confirm',
         name: 'dynamodb',
         message: 'Does your service rely on DynamoDB?'
+      },
+      {
+        type: 'confirm',
+        name: 's3',
+        message: 'Is your service going to be using S3 buckets?'
       }
     ]).then(answers => {
-      this.slsSettings = {
-        name: answers.name,
-        stage: answers.stage,
-        region: answers.region,
-        dynamodb: answers.dynamodb
-      };
+      this.slsSettings = answers;
       this.log('app name', answers.name);
       this.log('app stage', answers.stage);
       this.log('app region', answers.region);
@@ -213,6 +213,15 @@ module.exports = class extends Generator {
         Resource: ['arn:aws:dynamodb:*:*:table/*']
       });
     }
+
+    if (this.slsSettings.s3) {
+      policy.Statement.push({
+        Effect: 'Allow',
+        Action: ['s3:CreateBucket'],
+        Resource: [`arn:aws:s3:::*`]
+      });
+    }
+
     const policyString = JSON.stringify(policy, null, 2);
     const fileName = `${project}-${escapeValFilename(stage)}-${escapeValFilename(region)}-policy.json`;
 
