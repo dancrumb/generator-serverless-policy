@@ -110,7 +110,11 @@ const buildPolicy = (serviceName, stage, region) => {
         Resource: ['*']
       },
       {
-        Action: ['logs:CreateLogGroup', 'logs:CreateLogStream'],
+        Action: [
+          'logs:CreateLogGroup',
+          'logs:CreateLogStream',
+          'logs:DeleteLogGroup'
+        ],
         Resource: [`arn:aws:logs:${region}:*:*`],
         Effect: 'Allow'
       },
