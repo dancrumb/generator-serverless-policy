@@ -11,21 +11,19 @@ const buildPolicy = (serviceName, stage, region) => {
         Action: [
           'cloudformation:List*',
           'cloudformation:Get*',
-          'cloudformation:PreviewStackUpdate'
+          'cloudformation:PreviewStackUpdate',
+          'cloudformation:ValidateTemplate'
         ],
         Resource: ['*']
       },
       {
         Effect: 'Allow',
         Action: [
-          'cloudformation:CreateStack',
-          'cloudformation:CreateUploadBucket',
-          'cloudformation:DeleteStack',
-          'cloudformation:DescribeStackEvents',
-          'cloudformation:DescribeStackResource',
-          'cloudformation:DescribeStackResources',
-          'cloudformation:UpdateStack',
-          'cloudformation:DescribeStacks'
+          "cloudformation:CreateStack",
+          "cloudformation:CreateUploadBucket",
+          "cloudformation:DeleteStack",
+          "cloudformation:Describe*",
+          "cloudformation:UpdateStack"
         ],
         Resource: [
           `arn:aws:cloudformation:${region}:*:stack/${serviceName}-${stage}/*`
@@ -38,20 +36,22 @@ const buildPolicy = (serviceName, stage, region) => {
       },
       {
         Effect: 'Allow',
-        Action: ['s3:CreateBucket'],
-        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploymentbucket*`]
+        Action: [
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:ListBucket",
+          "s3:ListBucketVersions"
+        ],
+        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploy*`]
       },
       {
         Effect: 'Allow',
         Action: [
-          's3:PutObject',
-          's3:GetObject',
-          's3:ListBucket',
-          's3:DeleteObject',
-          's3:DeleteBucket',
-          's3:ListBucketVersions'
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
         ],
-        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploymentbucket*`]
+        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploy*`]
       },
       {
         Effect: 'Allow',
