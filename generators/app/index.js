@@ -11,7 +11,8 @@ const buildPolicy = (serviceName, stage, region) => {
         Action: [
           'cloudformation:List*',
           'cloudformation:Get*',
-          'cloudformation:PreviewStackUpdate'
+          'cloudformation:PreviewStackUpdate',
+          'cloudformation:ValidateTemplate'
         ],
         Resource: ['*']
       },
