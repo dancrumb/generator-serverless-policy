@@ -94,7 +94,13 @@ const buildPolicy = (serviceName, stage, region) => {
       },
       {
         Effect: 'Allow',
-        Action: 'iam:*',
+        Action: [
+          'iam:GetRole',
+          'iam:CreateRole',
+          'iam:PutRolePolicy',
+          'iam:DeleteRolePolicy',
+          'iam:DeleteRole'
+      ],
         Resource: [
           `arn:aws:iam::*:role/${serviceName}-${stage}-${region}-lambdaRole`
         ]
