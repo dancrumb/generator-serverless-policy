@@ -78,7 +78,9 @@ const buildPolicy = (serviceName, stage, region) => {
           'apigateway:DELETE'
         ],
         Resource: [
-          'arn:aws:apigateway:*::/restapis*'
+          'arn:aws:apigateway:*::/restapis*',
+          'arn:aws:apigateway:*::/apikeys*',
+          'arn:aws:apigateway:*::/usageplans*'
         ]
       },
       {
