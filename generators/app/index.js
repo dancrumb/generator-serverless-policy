@@ -42,7 +42,9 @@ const buildPolicy = (serviceName, stage, region) => {
           "s3:DeleteBucket",
           "s3:ListBucket",
           "s3:ListBucketVersions",
-          "s3:PutAccelerateConfiguration"
+          "s3:PutAccelerateConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:PutEncryptionConfiguration"
         ],
         Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploy*`]
       },
@@ -76,7 +78,8 @@ const buildPolicy = (serviceName, stage, region) => {
           'apigateway:GET',
           'apigateway:POST',
           'apigateway:PUT',
-          'apigateway:DELETE'
+          'apigateway:DELETE',
+          "apigateway:PATCH"
         ],
         Resource: [
           'arn:aws:apigateway:*::/restapis*',
