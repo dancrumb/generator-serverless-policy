@@ -22,6 +22,6 @@
   "author": "Dan Rumney <dancrumb@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "yeoman-generator": "^2.0.5"
+    "yeoman-generator": "^4.1.0"
   }
 }
