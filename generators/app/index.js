@@ -2,7 +2,7 @@
 const fs = require('fs');
 const Generator = require('yeoman-generator');
 
-const buildPolicy = (serviceName, stage, region) => {
+const buildPolicy = ({ name, account, stage, region }) => {
   return {
     Version: '2012-10-17',
     Statement: [
@@ -25,7 +25,7 @@ const buildPolicy = (serviceName, stage, region) => {
           "cloudformation:UpdateStack"
         ],
         Resource: [
-          `arn:aws:cloudformation:${region}:*:stack/${serviceName}-${stage}/*`
+          `arn:aws:cloudformation:${region}:${account}:stack/${name}-${stage}/*`
         ]
       },
       {
@@ -40,12 +40,14 @@ const buildPolicy = (serviceName, stage, region) => {
           "s3:CreateBucket",
           "s3:DeleteBucket",
           "s3:ListBucket",
+          "s3:GetBucketPolicy",
+          "s3:PutBucketPolicy",
           "s3:ListBucketVersions",
           "s3:PutAccelerateConfiguration",
           "s3:GetEncryptionConfiguration",
           "s3:PutEncryptionConfiguration"
         ],
-        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploy*`]
+        Resource: [`arn:aws:s3:::${name}*serverlessdeploy*`]
       },
       {
         Effect: 'Allow',
@@ -54,7 +56,7 @@ const buildPolicy = (serviceName, stage, region) => {
           "s3:GetObject",
           "s3:DeleteObject"
         ],
-        Resource: [`arn:aws:s3:::${serviceName}*serverlessdeploy*`]
+        Resource: [`arn:aws:s3:::${name}*serverlessdeploy*`]
       },
       {
         Effect: 'Allow',
@@ -68,7 +70,7 @@ const buildPolicy = (serviceName, stage, region) => {
           'lambda:Update*'
         ],
         Resource: [
-          `arn:aws:lambda:${region}:*:function:${serviceName}-${stage}-*`
+          `arn:aws:lambda:${region}:${account}:function:${name}-${stage}-*`
         ]
       },
       {
@@ -89,13 +91,13 @@ const buildPolicy = (serviceName, stage, region) => {
       {
         Effect: 'Allow',
         Action: ['iam:PassRole'],
-        Resource: ['arn:aws:iam::*:role/*']
+        Resource: [`arn:aws:iam::${account}:role/*`]
       },
       {
         Effect: 'Allow',
         Action: 'kinesis:*',
         Resource: [
-          `arn:aws:kinesis:*:*:stream/${serviceName}-${stage}-${region}`
+          `arn:aws:kinesis:*:*:stream/${name}-${stage}-${region}`
         ]
       },
       {
@@ -106,15 +108,15 @@ const buildPolicy = (serviceName, stage, region) => {
           'iam:PutRolePolicy',
           'iam:DeleteRolePolicy',
           'iam:DeleteRole'
-      ],
+        ],
         Resource: [
-          `arn:aws:iam::*:role/${serviceName}-${stage}-${region}-lambdaRole`
+          `arn:aws:iam::${account}:role/${name}-${stage}-${region}-lambdaRole`
         ]
       },
       {
         Effect: 'Allow',
         Action: 'sqs:*',
-        Resource: [`arn:aws:sqs:*:*:${serviceName}-${stage}-${region}`]
+        Resource: [`arn:aws:sqs:*:${account}:${name}-${stage}-${region}`]
       },
       {
         Effect: 'Allow',
@@ -127,12 +129,12 @@ const buildPolicy = (serviceName, stage, region) => {
           'logs:CreateLogStream',
           'logs:DeleteLogGroup'
         ],
-        Resource: [`arn:aws:logs:${region}:*:*`],
+        Resource: [`arn:aws:logs:${region}:${account}:*`],
         Effect: 'Allow'
       },
       {
         Action: ['logs:PutLogEvents'],
-        Resource: [`arn:aws:logs:${region}:*:*`],
+        Resource: [`arn:aws:logs:${region}:${account}:*`],
         Effect: 'Allow'
       },
       {
@@ -147,18 +149,18 @@ const buildPolicy = (serviceName, stage, region) => {
       {
         Effect: 'Allow',
         Action: ['events:Put*', 'events:Remove*', 'events:Delete*'],
-        Resource: [`arn:aws:events:*:*:rule/${serviceName}-${stage}-${region}`]
+        Resource: [`arn:aws:events:${region}:${account}:rule/${name}-${stage}-${region}`]
       },
       {
         Effect: 'Allow',
         Action: ['events:DescribeRule'],
-        Resource: [`arn:aws:events:${region}:*:rule/${serviceName}-${stage}-*`]
+        Resource: [`arn:aws:events:${region}:${account}:rule/${name}-${stage}-*`]
       }
     ]
   };
 };
 
-const escapeValFilename = function(val) {
+const escapeValFilename = function (val) {
   return val === '*' ? '_star_' : val;
 };
 
@@ -192,6 +194,12 @@ module.exports = class extends Generator {
       },
       {
         type: 'input',
+        name: 'account',
+        message: 'Your AWS account name',
+        default: '*'
+      },
+      {
+        type: 'input',
         name: 'stage',
         message: 'You can specify a specific stage, if you like:',
         default: '*'
@@ -215,6 +223,7 @@ module.exports = class extends Generator {
     ]).then(answers => {
       this.slsSettings = answers;
       this.log('app name', answers.name);
+      this.log('account number', answers.account);
       this.log('app stage', answers.stage);
       this.log('app region', answers.region);
     });
@@ -223,16 +232,14 @@ module.exports = class extends Generator {
   writing() {
     const done = this.async();
 
-    const project = this.slsSettings.name;
-    const stage = this.slsSettings.stage;
-    const region = this.slsSettings.region;
+    const { name: project, account, stage, region } = this.slsSettings;
 
-    const policy = buildPolicy(project, stage, region);
+    const policy = buildPolicy(this.slsSettings);
     if (this.slsSettings.dynamodb) {
       policy.Statement.push({
         Effect: 'Allow',
         Action: ['dynamodb:*'],
-        Resource: ['arn:aws:dynamodb:*:*:table/*']
+        Resource: [`arn:aws:dynamodb:*:${account}:table/*`]
       });
     }
 
@@ -244,8 +251,10 @@ module.exports = class extends Generator {
       });
     }
 
+
     const policyString = JSON.stringify(policy, null, 2);
-    const fileName = `${project}-${escapeValFilename(stage)}-${escapeValFilename(region)}-policy.json`;
+    const accountName = account === '*' ? '' : `${account}-`;
+    const fileName = `${accountName}${project}-${escapeValFilename(stage)}-${escapeValFilename(region)}-policy.json`;
 
     this.log(`Writing to ${fileName}`);
     fs.writeFile(fileName, policyString, done);
