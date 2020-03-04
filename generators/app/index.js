@@ -199,11 +199,7 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'account',
-<<<<<<< HEAD
         message: 'Your AWS account ID',
-=======
-        message: 'Your AWS account name',
->>>>>>> 4b3f788... Added Account filter and updated s3 bucket policies
         default: '*'
       },
       {
