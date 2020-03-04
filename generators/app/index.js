@@ -195,7 +195,7 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'account',
-        message: 'Your AWS account name',
+        message: 'Your AWS account ID',
         default: '*'
       },
       {
