@@ -42,7 +42,10 @@ const buildPolicy = ({ name, account, stage, region }) => {
           "s3:ListBucket",
           "s3:GetBucketPolicy",
           "s3:PutBucketPolicy",
+<<<<<<< HEAD
           "s3:DeleteBucketPolicy",
+=======
+>>>>>>> 4b3f788... Added Account filter and updated s3 bucket policies
           "s3:ListBucketVersions",
           "s3:PutAccelerateConfiguration",
           "s3:GetEncryptionConfiguration",
@@ -196,7 +199,11 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'account',
+<<<<<<< HEAD
         message: 'Your AWS account ID',
+=======
+        message: 'Your AWS account name',
+>>>>>>> 4b3f788... Added Account filter and updated s3 bucket policies
         default: '*'
       },
       {
