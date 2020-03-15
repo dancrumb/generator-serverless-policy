@@ -18,7 +18,7 @@ This project requires [Yeoman](https://yeoman.io). Install globally with:
 npm install -g yo
 ```
 
-_NB as of 2020-03-05 this requiest node >= v10_
+_NB as of 2020-03-05 this requires node >= v10_
 
 Then install the generator:
 
@@ -32,7 +32,7 @@ Now run in the directory in which you wish to output the policy JSON file:
 yo serverless-policy
 ```
 
-The generator will ask questions about region, stage, DynamoDB and S3 before outputting a policy. If this is the first time you have used Yeoman the tool will prompt you about sharing analytics with them; _the answer to this does not affect the generation of the policy_.
+The generator will ask questions about region, stage, DynamoDB and S3 before outputting a policy. If this is the first time you have used Yeoman then Yeoman will prompt you about sharing analytics with them; _the answer to this does not affect the generation of the policy_.
 
 ## Acknowledgements
 
