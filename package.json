@@ -1,6 +1,6 @@
 {
   "name": "@polinom.io/generator-serverless-policy",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Generator for the basic IAM policy to allow a user to deploy a Serverless service. Forked from https://github.com/dancrumb/generator-serverless-policy",
   "main": "index.js",
   "scripts": {
