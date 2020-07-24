@@ -25,6 +25,6 @@
     "yeoman-generator": "^5.4.2"
   },
   "devDependencies": {
-    "git-cz": "^4.3.1"
+    "git-cz": "^4.7.0"
   }
 }
