@@ -42,6 +42,7 @@ const buildPolicy = ({ name, account, stage, region }) => {
           "s3:ListBucket",
           "s3:GetBucketPolicy",
           "s3:PutBucketPolicy",
+          "s3:DeleteBucketPolicy",
           "s3:ListBucketVersions",
           "s3:PutAccelerateConfiguration",
           "s3:GetEncryptionConfiguration",
@@ -80,7 +81,8 @@ const buildPolicy = ({ name, account, stage, region }) => {
           'apigateway:POST',
           'apigateway:PUT',
           'apigateway:DELETE',
-          "apigateway:PATCH"
+          "apigateway:PATCH",
+          "apigateway:UpdateRestApiPolicy"
         ],
         Resource: [
           'arn:aws:apigateway:*::/restapis*',
