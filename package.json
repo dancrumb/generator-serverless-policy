@@ -1,14 +1,14 @@
 {
-  "name": "@polinom.io/generator-serverless-policy",
-  "version": "3.1.3",
-  "description": "Generator for the basic IAM policy to allow a user to deploy a Serverless service. Forked from https://github.com/dancrumb/generator-serverless-policy",
+  "name": "generator-serverless-policy",
+  "version": "3.1.2",
+  "description": "Generator for the basic IAM policy to allow a user to deploy a Serverless service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/polinom-io/generator-serverless-policy"
+    "url": "https://github.com/dancrumb/generator-serverless-policy.git"
   },
   "files": [
     "generators"
@@ -17,7 +17,7 @@
     "yeoman-generator"
   ],
   "engines": {
-    "node": ">= 6.4.0"
+    "node": ">= 10.x.x"
   },
   "author": "Dan Rumney <dancrumb@gmail.com>",
   "license": "MIT",

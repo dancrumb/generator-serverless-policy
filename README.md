@@ -13,23 +13,23 @@ The contents of this can then be used to create a policy in your IAM dashboard.
 
 ## Usage
 
-This project requires [Yeoman](https://yeoman.io). Install globally with:
+This project requires [Yeoman](https://yeoman.io). Install it globally with:
 
-```
+```bash
 npm install -g yo
 ```
 
-_NB as of 2020-03-05 this requires node >= v10_
+_NB_: as of 2020-03-05 this requires node >= v10
 
 Then install the generator:
 
-```
+```bash
 npm install -y generator-serverless-policy
 ```
 
 Now run in the directory in which you wish to output the policy JSON file:
 
-```
+```bash
 yo serverless-policy
 ```
 
@@ -37,4 +37,4 @@ The generator will ask questions about region, stage, DynamoDB and S3 before out
 
 ## Acknowledgements
 
-The basic Policy Document is taken from https://github.com/serverless/serverless/issues/1439#issuecomment-268434517
+The basic Policy Document is taken from [here](https://github.com/serverless/serverless/issues/1439#issuecomment-268434517)
