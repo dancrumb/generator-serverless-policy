@@ -22,7 +22,7 @@
   "author": "Dan Rumney <dancrumb@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "yeoman-generator": "^4.1.0"
+    "yeoman-generator": "^5.4.0"
   },
   "devDependencies": {
     "git-cz": "^4.3.1"
